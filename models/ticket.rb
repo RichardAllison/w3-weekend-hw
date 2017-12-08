@@ -17,6 +17,18 @@ class Ticket
     @id = ticket['id']
   end
 
+  def find()
+    sql = "SELECT * FROM tickets WHERE id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
+  def delete()
+    sql = "DELETE FROM customers WHERE id = $1;"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
   def Ticket.all()
     sql = "SELECT * FROM tickets;"
     ticket_hashes = SqlRunner.run(sql)

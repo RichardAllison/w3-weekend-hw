@@ -24,6 +24,18 @@ class Film
     SqlRunner.run(sql, values)
   end
 
+  def find()
+    sql = "SELECT * FROM films WHERE id = $1"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
+  def delete()
+    sql = "DELETE FROM customers WHERE id = $1;"
+    values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
   def Film.all()
     sql = "SELECT * FROM films;"
     film_hashes = SqlRunner.run(sql)
