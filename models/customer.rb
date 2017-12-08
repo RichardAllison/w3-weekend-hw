@@ -8,7 +8,7 @@ class Customer
   def initialize(options)
     @id = options['id'].to_i() if options['id']
     @name = options['name']
-    @funds = options['funds']
+    @funds = options['funds'].to_i()
   end
 
   def save()
@@ -16,6 +16,10 @@ class Customer
     values = [@name, @funds]
     customer = SqlRunner.run(sql, values).first()
     @id = customer['id'].to_i()
+  end
+
+  def Customer.delete_all()
+    SqlRunner.run("DELETE FROM customers;")
   end
 
 end
