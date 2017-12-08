@@ -1,14 +1,14 @@
 require_relative('./db/sql_runner.rb')
 
-class Film
+class Customer
 
   attr_reader(:id)
-  attr_accessor(:title, :price)
+  attr_accessor(:name, :funds)
 
   def initialize(options)
     @id = options['id'].to_i() if options['id']
-    @title = options['title']
-    @price = options['price'].to_i()
+    @name = options['name']
+    @funds = options['funds']
   end
 
 end
