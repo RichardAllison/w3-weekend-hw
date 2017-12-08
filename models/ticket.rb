@@ -10,4 +10,7 @@ class Ticket
     @film_id = options['film_id'].to_i() if options['film_id']
   end
 
+  def save()
+  end
+
 end
