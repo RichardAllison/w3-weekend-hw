@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS films;
 CREATE TABLE customers (
   id SERIAL4 PRIMARY KEY,
   name VARCHAR(255),
-  funds INT4
+  funds DECIMAL
 );
 
 CREATE TABLE films (

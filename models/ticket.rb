@@ -10,7 +10,17 @@ class Ticket
     @film_id = options['film_id'].to_i() if options['film_id']
   end
 
+  def sell_ticket()
+    customer = Customer.find(@customer_id)
+    film = Film.find(@film_id)
+    customer.funds -= film.price if customer.funds >= film.price
+    sql = "UPDATE customers SET funds = $1 WHERE id = $2"
+    values = [customer.funds, @customer_id]
+    SqlRunner.run(sql, values)
+  end
+
   def save()
+    sell_ticket()
     sql = "INSERT INTO tickets (customer_id, film_id) VALUES ($1, $2) RETURNING id;"
     values = [@customer_id, @film_id]
     ticket = SqlRunner.run(sql, values).first()

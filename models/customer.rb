@@ -8,7 +8,7 @@ class Customer
   def initialize(options)
     @id = options['id'].to_i() if options['id']
     @name = options['name']
-    @funds = options['funds'].to_i()
+    @funds = options['funds'].to_f()
   end
 
   def save()
@@ -24,11 +24,6 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
-  def find()
-    sql = "SELECT * FROM customers WHERE id = $1"
-    values = [@id]
-    SqlRunner.run(sql, values)
-  end
 
   def delete()
     sql = "DELETE FROM customers WHERE id = $1;"
@@ -36,7 +31,8 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
-  def films
+
+  def films()
     sql = "SELECT films.title
     FROM films
     INNER JOIN tickets
@@ -53,6 +49,14 @@ class Customer
     customer_hashes = SqlRunner.run(sql)
     result = customer_hashes.map { |customer_hash| Customer.new(customer_hash) }
     return result
+  end
+
+  def Customer.find(id)
+    sql = "SELECT * FROM customers WHERE id = $1"
+    values = [id]
+    customer_hash = SqlRunner.run(sql, values).first()
+    customer = Customer.new(customer_hash)
+    return customer
   end
 
   def Customer.delete_all()
