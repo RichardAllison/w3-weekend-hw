@@ -20,11 +20,15 @@ class Ticket
   end
 
   def save()
-    sell_ticket()
-    sql = "INSERT INTO tickets (customer_id, film_id) VALUES ($1, $2) RETURNING id;"
-    values = [@customer_id, @film_id]
-    ticket = SqlRunner.run(sql, values).first()
-    @id = ticket['id']
+    customer = Customer.find(@customer_id)
+    film = Film.find(@film_id)
+    if customer.funds >= film.price
+      sell_ticket()
+      sql = "INSERT INTO tickets (customer_id, film_id) VALUES ($1, $2) RETURNING id;"
+      values = [@customer_id, @film_id]
+      ticket = SqlRunner.run(sql, values).first()
+      @id = ticket['id']
+    end
   end
 
   def find()

@@ -44,6 +44,16 @@ class Customer
     return result
   end
 
+  def tickets()
+    sql = "SELECT *
+    FROM tickets
+    WHERE customer_id = $1;"
+    values = [@id]
+    ticket_hashes = SqlRunner.run(sql, values)
+    result = ticket_hashes.map { |ticket_hash| Ticket.new(ticket_hash)}
+    return result.count()
+  end
+
   def Customer.all()
     sql = "SELECT * FROM customers"
     customer_hashes = SqlRunner.run(sql)
