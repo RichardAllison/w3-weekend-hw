@@ -57,9 +57,9 @@ class Film
     ON films.id = screenings.film_id
     WHERE films.id = $1"
     values = [@id]
-    screening_hash = SqlRunner.run(sql, values).first()
-    screening = Screening.new(screening_hash)
-    return screening
+    screening_hashes = SqlRunner.run(sql, values)
+    screenings_array = screening_hashes.map { |screening_hash| Screening.new(screening_hash)}
+    return screenings_array
   end
 
   def Film.all()

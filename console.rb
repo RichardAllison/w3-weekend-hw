@@ -6,6 +6,7 @@ require_relative('./models/screening.rb')
 
 Customer.delete_all
 Film.delete_all
+Screening.delete_all
 Ticket.delete_all
 
 customer1 = Customer.new({'name' => 'Richard', 'funds' => '50'})
@@ -29,12 +30,14 @@ film2.save()
 film3 = Film.new({'title' => 'It\'s a Wonderful Life', 'price' => '7.9'})
 film3.save()
 
-film1_screening = Screening.new({'film_id' => film1.id, 'time' => '15:00'})
+film1_screening = Screening.new({'film_id' => film1.id, 'time' => '15:00', 'ticket_limit' => '50'})
 film1_screening.save()
-film2_screening = Screening.new({'film_id' => film2.id, 'time' => '23:00'})
+film2_screening = Screening.new({'film_id' => film2.id, 'time' => '23:00', 'ticket_limit' => '20'})
 film2_screening.save()
-film3_screening = Screening.new({'film_id' => film3.id, 'time' => '18:30'})
+film3_screening = Screening.new({'film_id' => film3.id, 'time' => '18:30', 'ticket_limit' => '5'})
 film3_screening.save()
+film1_screening2 = Screening.new({'film_id' => film1.id, 'time' => '20:15', 'ticket_limit' => '50'})
+film1_screening2.save()
 
 ticket1 = Ticket.new({'customer_id' => customer1.id, 'screening_id' => film1_screening.id})
 ticket1.save()
@@ -52,6 +55,8 @@ ticket7 = Ticket.new({'customer_id' => customer5.id, 'screening_id' => film1_scr
 ticket7.save()
 ticket8 = Ticket.new({'customer_id' => customer5.id, 'screening_id' => film1_screening.id})
 ticket8.save()
+ticket9 = Ticket.new({'customer_id' => customer2.id, 'screening_id' => film1_screening2.id})
+ticket9.save
 
 binding.pry
 nil

@@ -9,6 +9,7 @@ class Screening
     @id = options['id'].to_i() if options['id']
     @film_id = options['film_id'].to_i() if options['film_id']
     @time = options['time']
+    @ticket_limit = options['ticket_limit']
   end
 
   def save()
@@ -28,24 +29,6 @@ class Screening
     sql = "DELETE FROM screenings WHERE id = $1;"
     values = [@id]
     SqlRunner.run(sql, values)
-  end
-
-  def customers()
-    sql = "SELECT customers.name, customers.funds
-    FROM screenings
-    INNER JOIN tickets
-    ON tickets.screening_id = screenings.id
-    INNER JOIN customers
-    ON tickets.customer_id = customers.id
-    WHERE screenings.film_id = $1"
-    values = [@id]
-    customers_hash = SqlRunner.run(sql, values)
-    result = customers_hash.map { |customers_hash| Customer.new(customers_hash)}
-    return result
-  end
-
-  def customer_count()
-    customers.count()
   end
 
   def Screening.all()
