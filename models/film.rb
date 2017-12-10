@@ -31,7 +31,7 @@ class Film
     SqlRunner.run(sql, values)
   end
 
-  def customers
+  def customers()
     sql = "SELECT customers.name
     FROM customers
     INNER JOIN tickets
@@ -41,6 +41,10 @@ class Film
     customers_hash = SqlRunner.run(sql, values)
     result = customers_hash.map { |customers_hash| Customer.new(customers_hash)}
     return result
+  end
+
+  def customer_count()
+    customers.count()
   end
 
   def Film.all()
