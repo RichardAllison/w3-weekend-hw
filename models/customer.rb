@@ -31,12 +31,13 @@ class Customer
     SqlRunner.run(sql, values)
   end
 
-
   def films()
     sql = "SELECT films.title
     FROM films
+    INNER JOIN screenings
+    ON films.id = screenings.film_id
     INNER JOIN tickets
-    ON films.id = tickets.film_id
+    ON screening_id = screenings.id
     WHERE tickets.customer_id = $1;"
     values = [@id]
     films_hashes = SqlRunner.run(sql, values)

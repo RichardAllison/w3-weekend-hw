@@ -24,7 +24,6 @@ class Film
     SqlRunner.run(sql, values)
   end
 
-
   def delete()
     sql = "DELETE FROM customers WHERE id = $1;"
     values = [@id]
@@ -32,11 +31,15 @@ class Film
   end
 
   def customers()
-    sql = "SELECT customers.name
-    FROM customers
+    sql = "SELECT *
+    FROM films
+    INNER JOIN screenings
+    ON films.id = screenings.film_id
     INNER JOIN tickets
-    ON customers.id = tickets.customer_id
-    where tickets.film_id = $1"
+    ON tickets.screening_id = screenings.id
+    INNER JOIN customers
+    ON tickets.customer_id = customers.id
+    WHERE screenings.film_id = $1"
     values = [@id]
     customers_hash = SqlRunner.run(sql, values)
     result = customers_hash.map { |customers_hash| Customer.new(customers_hash)}
@@ -45,6 +48,18 @@ class Film
 
   def customer_count()
     customers.count()
+  end
+
+  def screenings()
+    sql = "SELECT *
+    FROM films
+    INNER JOIN screenings
+    ON films.id = screenings.film_id
+    WHERE films.id = $1"
+    values = [@id]
+    screening_hash = SqlRunner.run(sql, values).first()
+    screening = Screening.new(screening_hash)
+    return screening
   end
 
   def Film.all()

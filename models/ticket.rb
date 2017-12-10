@@ -7,12 +7,12 @@ class Ticket
   def initialize(options)
     @id = options['id'].to_i() if options['id']
     @customer_id = options['customer_id'].to_i() if options['customer_id']
-    @film_id = options['film_id'].to_i() if options['film_id']
+    @screening_id = options['screening_id'].to_i() if options['screening_id']
   end
 
   def sell_ticket()
     customer = Customer.find(@customer_id)
-    film = Film.find(@film_id)
+    film = Screening.find_film(@screening_id)
     customer.funds -= film.price if customer.funds >= film.price
     sql = "UPDATE customers SET funds = $1 WHERE id = $2"
     values = [customer.funds, @customer_id]
@@ -21,20 +21,14 @@ class Ticket
 
   def save()
     customer = Customer.find(@customer_id)
-    film = Film.find(@film_id)
+    film = Screening.find_film(@screening_id)
     if customer.funds >= film.price
       sell_ticket()
-      sql = "INSERT INTO tickets (customer_id, film_id) VALUES ($1, $2) RETURNING id;"
-      values = [@customer_id, @film_id]
+      sql = "INSERT INTO tickets (customer_id, screening_id) VALUES ($1, $2) RETURNING id;"
+      values = [@customer_id, @screening_id]
       ticket = SqlRunner.run(sql, values).first()
       @id = ticket['id']
     end
-  end
-
-  def find()
-    sql = "SELECT * FROM tickets WHERE id = $1"
-    values = [@id]
-    SqlRunner.run(sql, values)
   end
 
   def delete()
@@ -48,6 +42,15 @@ class Ticket
     ticket_hashes = SqlRunner.run(sql)
     result = ticket_hashes.map { |ticket_hash| Ticket.new(ticket_hash)}
     return result
+  end
+
+  def Ticket.find(id)
+    sql = "SELECT * FROM tickets WHERE id = $1"
+    values = [id]
+    SqlRunner.run(sql, values)
+    ticket_hash = SqlRunner.run(sql, values).first()
+    ticket = Ticket.new(ticket_hash)
+    return ticket
   end
 
   def Ticket.delete_all()
